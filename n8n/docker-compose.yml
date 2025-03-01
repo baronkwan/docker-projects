@@ -12,10 +12,17 @@ services:
       - WEBHOOK_URL=https://${N8N_HOST}/
       - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}
       - N8N_SECURE_COOKIE=false
-      # Required for using external javascript packages
-      - NODE_FUNCTION_ALLOW_EXTERNAL=*
       - N8N_TRUST_PROXY=true
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+      # Required for using external javascript packages
+      - NODE_FUNCTION_ALLOW_EXTERNAL=*
+      # Auto-delete workflow execution logs older than 168h/7d
+      - EXECUTIONS_DATA_PRUNE = true
+      - EXECUTIONS_DATA_MAX_AGE = 168
+      # Optimize SQLite storage space after container restarts
+      - DB_SQLITE_VACUUM_ON_STARTUP = true
+      # Keep max 2000 executions regardless of age
+      - EXECUTIONS_DATA_PRUNE_MAX_COUNT = 2000
     volumes:
       - n8n_data:/home/node/.n8n
 
